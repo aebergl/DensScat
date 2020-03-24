@@ -12,10 +12,10 @@ A fast MATLAB function for creating density scatter plots for large datasets
 % OUTPUTS:
 % * fh: figure handle to for the scatter plot
 %
-% OTHER PARAMETERS passed as parameter-value pairs default  in []
+% OTHER PARAMETERS passed as parameter-value pairs default in []
 % 'MarkerType': Marker type '.od<>^vs+*xph' ['.']
 % 'mSize': Integer for Marker size [50 for '.' otherwise 12]
-% 'ColorMap': Colormap to be used name eg 'jet' or N*3 matrix [TurboMap builtin)
+% 'ColorMap': Colormap to be used name eg 'jet' or N*3 matrix [TurboMap builtin]
 % 'logDensity': true/false for taking the log10 of the density [true]
 % 'AxisSquare': true/false for making axis square [true]
 % 'SmoothDensity': true/false for density smoothing [true]
