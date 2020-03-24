@@ -37,7 +37,7 @@ A fast MATLAB function for creating density scatter plots for large datasets
 
 ## Simple Example ##
 
-The following example is based on Illumina 450K methylation data
+The following example is based on Illumina 450K methylation data with 485 577 points
  
 ```matlab
 load DensityScatterPlotExample
