@@ -33,3 +33,17 @@ A fast MATLAB function for creating density scatter plots for large datasets
 % by Anders Berglund, 2020 aebergl at gmail.com               %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ```
+
+
+## Simple Example ##
+
+The following example is based on Illumina 450K methylation data
+ 
+```matlab
+load DensityScatterPlotExample
+
+fh = DensScat(x,y);
+
+```
+
+<img src="Example1.png" alt="Example" width="600">
