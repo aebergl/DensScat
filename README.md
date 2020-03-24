@@ -19,7 +19,7 @@ A fast MATLAB function for creating density scatter plots for large datasets
 % 'logDensity': true/false for taking the log10 of the density [true]
 % 'AxisSquare': true/false for making axis square [true]
 % 'SmoothDensity': true/false for density smoothing [true]
-% 'lamda':  Integer for the degree of smoothing [30]
+% 'lambda':  Integer for the degree of smoothing [30]
 % 'nBin_x': Integer for number of bins along the x-axis [200]
 % 'nBin_y': Integer for number of bins along the y-axis [200]
 % 'RemovePoints': true/false only plot points that that are unique based on a 1000*1000 grid [true]
