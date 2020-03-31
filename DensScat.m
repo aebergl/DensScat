@@ -21,6 +21,8 @@ function fh = DensScat(x,y, varargin)
 % 'nBin_x': Integer for number of bins along the x-axis [200]
 % 'nBin_y': Integer for number of bins along the y-axis [200]
 % 'RemovePoints': true/false only plot points that that are unique based on a 1000*1000 grid [true]
+% 'TargetAxes': Axes handle to existing axes that will be used [false]
+% 'ColorBar': true/false creates a color bar for the density [true]
 %
 % The smoothing is based on the following reference:
 % Paul H. C. Eilers and Jelle J. Goeman
@@ -62,6 +64,7 @@ end
 %Parse input and set default values
 p = parseArguments(varargin{:});
 
+fh = 0;
 
 % Remove Missing values
 indx = isnan(x) | isnan(y);
@@ -113,12 +116,14 @@ if p.RemovePoints
     density = density(indx);
 end
 
-% Create figure handle
-fh = figure('Name','Density Scatter Plot','Color','w','Tag','Density Scatter Plot','GraphicsSmoothing','off');
-
-% Create figure handle
-ah = axes(fh,'NextPlot','add','tag','Scatter Plot','Box','on','FontSize',16,'Linewidth',1);
-
+if isgraphics(p.TargetAxes,'axes')
+    ah = p.TargetAxes;
+else
+    % Create figure handle
+    fh = figure('Name','Density Scatter Plot','Color','w','Tag','Density Scatter Plot','GraphicsSmoothing','off');
+    % Create figure handle
+    ah = axes(fh,'NextPlot','add','tag','Scatter Plot','Box','on','FontSize',16,'Linewidth',1);
+end
 
 if ismatrix(p.ColorMap) && isnumeric(p.ColorMap)
     cMap = p.ColorMap;
@@ -136,8 +141,11 @@ if p.AxisSquare
     axis square
 end
 
-hc = colorbar(ah);
-hc.Label.String = 'Density';
+if p.ColorBar
+    hc = colorbar(ah);
+    hc.Label.String = 'Density';
+end
+
 end
 
 function p = parseArguments(varargin)
@@ -155,6 +163,8 @@ addParameter(p,'lambda', 30, @(x) isnumeric(x) && isscalar(x) && x > 0);
 addParameter(p,'nBin_x', 200, @(x) isnumeric(x) && isscalar(x) && x > 0);
 addParameter(p,'nBin_y', 200, @(x) isnumeric(x) && isscalar(x) && x > 0);
 addParameter(p,'RemovePoints', true, @islogical);
+addParameter(p,'TargetAxes', false, @(x) isgraphics(x,'axes'));
+addParameter(p,'ColorBar', true, @islogical);
 parse(p,varargin{:});
 p = p.Results;
 
