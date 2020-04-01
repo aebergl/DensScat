@@ -1,6 +1,6 @@
 function fh = DensScat(x,y, varargin)
 % USAGE:
-%   fh = DensScat(x, y) makes a density scatter plot using the vectors x & y
+%  fh = DensScat(x, y) makes a density scatter plot using the vectors x & y
 %
 % INPUTS:
 % * x & y are two numeric vectors describing the x-axis & y-axis
@@ -9,20 +9,21 @@ function fh = DensScat(x,y, varargin)
 % OUTPUTS:
 % * fh: figure handle to for the scatter plot
 %
-% OTHER PARAMETERS passed as parameter-value pairs default  in []
+% OTHER PARAMETERS passed as parameter-value pairs, defaults in []
 % 'MarkerType': Marker type '.od<>^vs+*xph' ['.']
 % 'mSize': Integer for Marker size [50 for '.' otherwise 12]
-% 'ColorMap': Colormap to be used name eg 'jet' or N*3 matrix [TurboMap
-% builtin]
+% 'ColorMap': Colormap to be used name eg 'jet' or N*3 matrix [TurboMap]
 % 'logDensity': true/false for taking the log10 of the density [true]
 % 'AxisSquare': true/false for making axis square [true]
 % 'SmoothDensity': true/false for density smoothing [true]
 % 'lambda':  Integer for the degree of smoothing [30]
 % 'nBin_x': Integer for number of bins along the x-axis [200]
 % 'nBin_y': Integer for number of bins along the y-axis [200]
-% 'RemovePoints': true/false only plot points that that are unique based on a 1000*1000 grid [true]
+% 'RemovePoints': true/false only plot points that that are unique based 
+%                 on a 1000*1000 grid [true]
 % 'TargetAxes': Axes handle to existing axes that will be used [false]
 % 'ColorBar': true/false creates a color bar for the density [true]
+% 'MaxDens': double for thresholding density D(D>MaxDens) = MaxDens [inf]
 %
 % The smoothing is based on the following reference:
 % Paul H. C. Eilers and Jelle J. Goeman
@@ -30,7 +31,7 @@ function fh = DensScat(x,y, varargin)
 % Bioinformatics, Mar 2004; 20: 623 - 628.
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% by Anders Berglund, 2020 aebergl at gmail.com               %
+%%% by Anders Berglund, 2020 aebergl@gmail.com                            %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Check number of input parameters
@@ -102,6 +103,10 @@ if p.logDensity
     density = log10(density+1);
 end
 
+if p.MaxDens
+    density(density > p.MaxDens) = p.MaxDens;
+end
+
 % make sure that high density points are plotted last
 [density,sort_indx] = sort(density,'Ascend');
 x = x(sort_indx);
@@ -165,6 +170,8 @@ addParameter(p,'nBin_y', 200, @(x) isnumeric(x) && isscalar(x) && x > 0);
 addParameter(p,'RemovePoints', true, @islogical);
 addParameter(p,'TargetAxes', false, @(x) isgraphics(x,'axes'));
 addParameter(p,'ColorBar', true, @islogical);
+addParameter(p,'MaxDens', inf, @(x) isnumeric(x) && isscalar(x) && x > 0);
+
 parse(p,varargin{:});
 p = p.Results;
 
