@@ -19,11 +19,13 @@ function fh = DensScat(x,y, varargin)
 % 'lambda':  Integer for the degree of smoothing [30]
 % 'nBin_x': Integer for number of bins along the x-axis [200]
 % 'nBin_y': Integer for number of bins along the y-axis [200]
-% 'RemovePoints': true/false only plot points that that are unique based 
+% 'RemovePoints': true/false only plot points that that are unique based
 %                 on a 1000*1000 grid [true]
 % 'TargetAxes': Axes handle to existing axes that will be used [false]
 % 'ColorBar': true/false creates a color bar for the density [true]
 % 'MaxDens': double for thresholding density D(D>MaxDens) = MaxDens [inf]
+% 'PointsToExclude': Nx2 matrix describing points to be exluded for example
+% [0 0] may be useful for RNAseq data [ [] ]
 %
 % The smoothing is based on the following reference:
 % Paul H. C. Eilers and Jelle J. Goeman
@@ -71,6 +73,14 @@ fh = 0;
 indx = isnan(x) | isnan(y);
 x(indx)= [];
 y(indx)= [];
+
+if ~isempty(p.PointsToExclude)
+    for i=1:size(p.PointsToExclude,1)
+        indx = (x == p.PointsToExclude(i,1)) & (y == p.PointsToExclude(i,2));
+        x(indx)= [];
+        y(indx)= [];
+    end
+end
 
 % get ranges
 min_x = min(x);
@@ -171,6 +181,8 @@ addParameter(p,'RemovePoints', true, @islogical);
 addParameter(p,'TargetAxes', false, @(x) isgraphics(x,'axes'));
 addParameter(p,'ColorBar', true, @islogical);
 addParameter(p,'MaxDens', inf, @(x) isnumeric(x) && isscalar(x) && x > 0);
+addParameter(p,'PointsToExclude', [], @(x) isnumeric(x))
+
 
 parse(p,varargin{:});
 p = p.Results;
