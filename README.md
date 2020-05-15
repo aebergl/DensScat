@@ -2,8 +2,6 @@
 A fast MATLAB function for creating density scatter plots for large datasets
 
 ```matlab
-% USAGE:
-% USAGE:
 %  fh = DensScat(x, y) makes a density scatter plot using the vectors x & y
 %
 % INPUTS:
@@ -28,6 +26,8 @@ A fast MATLAB function for creating density scatter plots for large datasets
 % 'TargetAxes': Axes handle to existing axes that will be used [false]
 % 'ColorBar': true/false creates a color bar for the density [true]
 % 'MaxDens': double for thresholding density D(D>MaxDens) = MaxDens [inf]
+% 'PointsToExclude': Nx2 matrix describing points to be exluded for example
+%                   [0 0] may be useful for RNAseq data [ [] ]
 %
 % The smoothing is based on the following reference:
 % Paul H. C. Eilers and Jelle J. Goeman
