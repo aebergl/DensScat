@@ -47,7 +47,7 @@ if ~ismatrix(x) || ~isnumeric(x) || ~ismatrix(y) || ~isnumeric(y)
 end
 
 % Check that they are all vectors
-if min(size(x)) ~= 1 || min(size(x)) ~= 1
+if min(size(x)) ~= 1 || min(size(y)) ~= 1
     error('x & y must be vectors');
 end
 
@@ -197,7 +197,7 @@ addParameter(p,'SmoothDensity', true, @islogical);
 addParameter(p,'lambda', 30, @(x) isnumeric(x) && isscalar(x) && x > 0);
 addParameter(p,'nBin_x', 200, @(x) isnumeric(x) && isscalar(x) && x > 0);
 addParameter(p,'nBin_y', 200, @(x) isnumeric(x) && isscalar(x) && x > 0);
-addParameter(p,'RemovePoints', true, @islogical);
+addParameter(p,'RemovePoints', false, @islogical);
 addParameter(p,'TargetAxes', false, @(x) isgraphics(x,'axes'));
 addParameter(p,'ColorBar', true, @islogical);
 addParameter(p,'LineColor', 'k');
