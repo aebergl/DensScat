@@ -64,16 +64,23 @@ if size(y,1) == 1
     y = y';
 end
 
+N=length(x);
+
 %Parse input and set default values
 p = parseArguments(varargin{:});
 
-fh = 0;
+% Create output density
+if nargout == 2
+    d_out = zeros(N,1);
+end
 
 % Remove Missing values
-indx = isnan(x) | isnan(y);
-x(indx)= [];
-y(indx)= [];
-
+indxMV = isnan(x) | isnan(y);
+x(indxMV)= [];
+y(indxMV)= [];
+if nargout == 2
+    indx_out = indxMV;
+end
 if ~isempty(p.PointsToExclude)
     for i=1:size(p.PointsToExclude,1)
         indx = (x == p.PointsToExclude(i,1)) & (y == p.PointsToExclude(i,2));
@@ -152,8 +159,18 @@ colormap(cMap);
 
 scatter(ah,x,y,p.mSize,density,p.MarkerType);
 
-if p.AxisSquare
-    axis square
+switch lower(p.AxisType)
+    case 'square'
+        axis square
+    case 'equal'
+        axis equal
+    case 'y=x'
+        axis equal
+        min_XY = min([ah.XLim(1), ah.YLim(1)]);
+        max_XY = min([ah.XLim(2), ah.YLim(2)]);
+        ah.XLim = [min_XY max_XY];
+        ah.YLim = [min_XY max_XY];
+        line(ah,ah.XLim ,ah.YLim,'Color',p.LineColor,'LineWidth',p.LineWidth,'LineStyle',p.LineStyle)
 end
 
 if p.ColorBar
@@ -167,12 +184,15 @@ function p = parseArguments(varargin)
 p = inputParser;
 
 expectedMarkerType = {'.od<>^vs+*xph'};
+expectedAxisType = {'equal','square','y=x'};
+expectedLineStyle = {'-','--',':','-.'};
+
 
 addParameter(p,'MarkerType', '.', @(x) length(x)==1 && ~isempty((strfind(expectedMarkerType,x))));
 addParameter(p,'mSize', 50, @(x) isnumeric(x) && isscalar(x) && x > 0);
 addParameter(p,'ColorMap', 'TurboMap');
 addParameter(p,'logDensity', true, @islogical);
-addParameter(p,'AxisSquare', true, @islogical);
+addParameter(p,'AxisType', 'square', @(x) any(validatestring(lower(x),expectedAxisType)));
 addParameter(p,'SmoothDensity', true, @islogical);
 addParameter(p,'lambda', 30, @(x) isnumeric(x) && isscalar(x) && x > 0);
 addParameter(p,'nBin_x', 200, @(x) isnumeric(x) && isscalar(x) && x > 0);
@@ -180,6 +200,9 @@ addParameter(p,'nBin_y', 200, @(x) isnumeric(x) && isscalar(x) && x > 0);
 addParameter(p,'RemovePoints', true, @islogical);
 addParameter(p,'TargetAxes', false, @(x) isgraphics(x,'axes'));
 addParameter(p,'ColorBar', true, @islogical);
+addParameter(p,'LineColor', 'k');
+addParameter(p,'LineWidth', 2, @(x) isnumeric(x) && isscalar(x) && x > 0);
+addParameter(p,'LineStyle', '-.',@(x) any(validatestring(lower(x),expectedLineStyle)));
 addParameter(p,'MaxDens', inf, @(x) isnumeric(x) && isscalar(x) && x > 0);
 addParameter(p,'PointsToExclude', [], @(x) isnumeric(x))
 
@@ -192,18 +215,18 @@ if ~p.MarkerType == '.'
 end
 end
 
-function Z = smooth1D(X,lambda)
+function Xout = smooth1D(Xin,lambda)
 % The smoothing is based on the following reference:
 % Paul H. C. Eilers and Jelle J. Goeman
 % Enhancing scatterplots with smoothed densities
 % Bioinformatics, Mar 2004; 20: 623 - 628.
 
-[n] = size(X,1);
-E = eye(n);
-D1 = diff(E,1);
-D2 = diff(D1,1);
-P = lambda.^2 .* D2'*D2 + 2.*lambda .* D1'*D1;
-Z = (E + P) \ X;
+    N = size(Xin,1);
+    E = eye(N);
+    D1 = diff(E,1);
+    D2 = diff(D1,1);
+    P = lambda.^2 .* D2' * D2 + 2 .* lambda .* D1' * D1;
+    Xout = (E + P) \ Xin;
 
 end
 
