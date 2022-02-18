@@ -83,10 +83,10 @@ if ~isempty(p.PointsToExclude)
 end
 
 % get ranges
-min_x = min(x);
-max_x = max(x);
-min_y = min(y);
-max_y = max(y);
+min_x = min(x,[],'omitnan');
+max_x = max(x,[],'omitnan');
+min_y = min(y,[],'omitnan');
+max_y = max(y,[],'omitnan');
 
 
 % Define edges
@@ -152,9 +152,24 @@ colormap(cMap);
 
 scatter(ah,x,y,p.mSize,density,p.MarkerType);
 
-if p.AxisSquare
-    axis square
+switch lower(p.AxisType)
+    case 'square'
+        axis square
+    case 'equal'
+        axis equal
+    case 'y=x'
+        axis equal
+        min_XY = min([min_x, min_y]);
+        max_XY = max([max_x, max_y]);
+        nudge = (max_XY - min_XY) / 50;
+        ah.XLim = [min_XY-nudge max_XY+nudge];
+        ah.YLim = [min_XY-nudge max_XY+nudge];
+        line(ah,ah.XLim ,ah.YLim,'Color','k','LineWidth',2,'LineStyle','-.')
+    case 'normal'
+
+        
 end
+
 
 if p.ColorBar
     hc = colorbar(ah);
@@ -167,17 +182,18 @@ function p = parseArguments(varargin)
 p = inputParser;
 
 expectedMarkerType = {'.od<>^vs+*xph'};
+expectedAxisType = {'equal','square','y=x','normal'};
 
 addParameter(p,'MarkerType', '.', @(x) length(x)==1 && ~isempty((strfind(expectedMarkerType,x))));
 addParameter(p,'mSize', 50, @(x) isnumeric(x) && isscalar(x) && x > 0);
 addParameter(p,'ColorMap', 'TurboMap');
 addParameter(p,'logDensity', true, @islogical);
-addParameter(p,'AxisSquare', true, @islogical);
+addParameter(p,'AxisType', 'square', @(x) any(validatestring(lower(x),expectedAxisType)));
 addParameter(p,'SmoothDensity', true, @islogical);
 addParameter(p,'lambda', 30, @(x) isnumeric(x) && isscalar(x) && x > 0);
 addParameter(p,'nBin_x', 200, @(x) isnumeric(x) && isscalar(x) && x > 0);
 addParameter(p,'nBin_y', 200, @(x) isnumeric(x) && isscalar(x) && x > 0);
-addParameter(p,'RemovePoints', true, @islogical);
+addParameter(p,'RemovePoints', false, @islogical);
 addParameter(p,'TargetAxes', false, @(x) isgraphics(x,'axes'));
 addParameter(p,'ColorBar', true, @islogical);
 addParameter(p,'MaxDens', inf, @(x) isnumeric(x) && isscalar(x) && x > 0);
