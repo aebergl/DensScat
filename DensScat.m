@@ -167,7 +167,7 @@ switch lower(p.AxisType)
     case 'y=x'
         axis equal
         min_XY = min([ah.XLim(1), ah.YLim(1)]);
-        max_XY = min([ah.XLim(2), ah.YLim(2)]);
+        max_XY = max([ah.XLim(2), ah.YLim(2)]);
         ah.XLim = [min_XY max_XY];
         ah.YLim = [min_XY max_XY];
         line(ah,ah.XLim ,ah.YLim,'Color',p.LineColor,'LineWidth',p.LineWidth,'LineStyle',p.LineStyle)
