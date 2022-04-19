@@ -140,6 +140,7 @@ end
 
 if isgraphics(p.TargetAxes,'axes')
     ah = p.TargetAxes;
+    fh = p.TargetAxes.Parent;
 else
     % Create figure handle
     fh = figure('Name','Density Scatter Plot','Color','w','Tag','Density Scatter Plot','GraphicsSmoothing','off');
@@ -162,7 +163,9 @@ scatter(ah,x,y,p.mSize,density,p.MarkerType);
 switch lower(p.AxisType)
     case 'square'
         axis square
-    case 'equal'
+    case 'auto'
+        axis auto
+case 'equal'
         axis equal
     case 'y=x'
         axis equal
@@ -184,7 +187,7 @@ function p = parseArguments(varargin)
 p = inputParser;
 
 expectedMarkerType = {'.od<>^vs+*xph'};
-expectedAxisType = {'equal','square','y=x'};
+expectedAxisType = {'equal','square','y=x','auto'};
 expectedLineStyle = {'-','--',':','-.'};
 
 
