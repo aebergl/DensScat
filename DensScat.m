@@ -14,7 +14,7 @@ function fh = DensScat(x,y, varargin)
 % 'mSize': Integer for Marker size [50 for '.' otherwise 12]
 % 'ColorMap': Colormap to be used name eg 'jet' or N*3 matrix [TurboMap]
 % 'logDensity': true/false for taking the log10 of the density [true]
-% 'AxisSquare': true/false for making axis square [true]
+% 'AxisType': 'equal','square','y=x','auto' ['square']
 % 'SmoothDensity': true/false for density smoothing [true]
 % 'lambda':  Integer for the degree of smoothing [30]
 % 'nBin_x': Integer for number of bins along the x-axis [200]
