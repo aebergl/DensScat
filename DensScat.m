@@ -173,7 +173,9 @@ case 'equal'
         max_XY = max([ah.XLim(2), ah.YLim(2)]);
         ah.XLim = [min_XY max_XY];
         ah.YLim = [min_XY max_XY];
-        line(ah,ah.XLim ,ah.YLim,'Color',p.LineColor,'LineWidth',p.LineWidth,'LineStyle',p.LineStyle)
+        if p.PlotLine
+            line(ah,ah.XLim ,ah.YLim,'Color',p.LineColor,'LineWidth',p.LineWidth,'LineStyle',p.LineStyle)
+        end
 end
 
 if p.ColorBar
@@ -208,6 +210,7 @@ addParameter(p,'LineWidth', 2, @(x) isnumeric(x) && isscalar(x) && x > 0);
 addParameter(p,'LineStyle', '-.',@(x) any(validatestring(lower(x),expectedLineStyle)));
 addParameter(p,'MaxDens', inf, @(x) isnumeric(x) && isscalar(x) && x > 0);
 addParameter(p,'PointsToExclude', [], @(x) isnumeric(x))
+addParameter(p,'PlotLine', false, @islogical);
 
 
 parse(p,varargin{:});
