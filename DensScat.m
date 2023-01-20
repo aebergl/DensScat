@@ -95,6 +95,8 @@ max_x = max(x);
 min_y = min(y);
 max_y = max(y);
 
+min_xy = min([min_x min_y]);
+max_xy = max([max_x max_y]);
 
 % Define edges
 edges_x = linspace(min_x, max_x, p.nBin_x+1);
@@ -165,14 +167,13 @@ switch lower(p.AxisType)
         axis square
     case 'auto'
         axis auto
-case 'equal'
+    case 'equal'
         axis equal
     case 'y=x'
         axis equal
-        min_XY = min([ah.XLim(1), ah.YLim(1)]);
-        max_XY = max([ah.XLim(2), ah.YLim(2)]);
-        ah.XLim = [min_XY max_XY];
-        ah.YLim = [min_XY max_XY];
+        NudgeVal = (max_xy - min_xy) * (p.NudgePercent / 100);
+        ah.XLim = [min_xy - NudgeVal max_xy + NudgeVal];
+        ah.YLim = [min_xy - NudgeVal max_xy + NudgeVal];
         if p.PlotLine
             line(ah,ah.XLim ,ah.YLim,'Color',p.LineColor,'LineWidth',p.LineWidth,'LineStyle',p.LineStyle)
         end
@@ -211,7 +212,7 @@ addParameter(p,'LineStyle', '-.',@(x) any(validatestring(lower(x),expectedLineSt
 addParameter(p,'MaxDens', inf, @(x) isnumeric(x) && isscalar(x) && x > 0);
 addParameter(p,'PointsToExclude', [], @(x) isnumeric(x))
 addParameter(p,'PlotLine', false, @islogical);
-
+addParameter(p,'NudgePercent', 2, @(x) isnumeric(x) && isscalar(x) && x > 0);
 
 parse(p,varargin{:});
 p = p.Results;
