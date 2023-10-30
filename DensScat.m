@@ -169,6 +169,9 @@ switch lower(p.AxisType)
         axis auto
     case 'equal'
         axis equal
+    case 'normal'
+        axis normal
+
     case 'y=x'
         axis equal
         NudgeVal = (max_xy - min_xy) * (p.NudgePercent / 100);
@@ -190,7 +193,7 @@ function p = parseArguments(varargin)
 p = inputParser;
 
 expectedMarkerType = {'.od<>^vs+*xph'};
-expectedAxisType = {'equal','square','y=x','auto'};
+expectedAxisType = {'equal','square','y=x','auto','normal'};
 expectedLineStyle = {'-','--',':','-.'};
 
 
