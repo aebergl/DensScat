@@ -74,8 +74,8 @@ if nargout == 2
     d_out = zeros(N,1);
 end
 
-% Remove Missing values
-indxMV = isnan(x) | isnan(y);
+% Remove Missing values and inf
+indxMV = ~isfinite(x) | ~isfinite(y); 
 x(indxMV)= [];
 y(indxMV)= [];
 if nargout == 2
