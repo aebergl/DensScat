@@ -147,7 +147,7 @@ else
     % Create figure handle
     fh = figure('Name','Density Scatter Plot','Color','w','Tag','Density Scatter Plot','GraphicsSmoothing','off');
     % Create figure handle
-    ah = axes(fh,'NextPlot','add','tag','Scatter Plot','Box','on','FontSize',16,'Linewidth',1);
+    ah = axes(fh,'NextPlot','add','tag','Scatter Plot','Box','on','FontSize',p.FontSize,'Linewidth',1);
 end
 
 if ismatrix(p.ColorMap) && isnumeric(p.ColorMap)
@@ -216,7 +216,7 @@ addParameter(p,'MaxDens', inf, @(x) isnumeric(x) && isscalar(x) && x > 0);
 addParameter(p,'PointsToExclude', [], @(x) isnumeric(x))
 addParameter(p,'PlotLine', false, @islogical);
 addParameter(p,'NudgePercent', 2, @(x) isnumeric(x) && isscalar(x) && x > 0);
-
+addParameter(p,'FontSize', 10, @(x) isnumeric(x) && isscalar(x) && x > 0);
 parse(p,varargin{:});
 p = p.Results;
 
