@@ -148,6 +148,9 @@ else
     fh = figure('Name','Density Scatter Plot','Color','w','Tag','Density Scatter Plot','GraphicsSmoothing','off');
     % Create figure handle
     ah = axes(fh,'NextPlot','add','tag','Scatter Plot','Box','on','FontSize',p.FontSize,'Linewidth',1);
+    ah.XGrid=p.XGrid;
+    ah.YGrid=p.YGrid;
+
 end
 
 if ismatrix(p.ColorMap) && isnumeric(p.ColorMap)
@@ -181,6 +184,20 @@ switch lower(p.AxisType)
             line(ah,ah.XLim ,ah.YLim,'Color',p.LineColor,'LineWidth',p.LineWidth,'LineStyle',p.LineStyle)
         end
 end
+
+% r_Pearson = corr(x,y,'Type','Pearson','rows','pairwise');
+% r_Spearman = corr(x,y,'Type','Spearman','rows','pairwise');
+% c = f_CCC([x,y,],0.05);
+% Str = {[sprintf('rp=%.4f rs=%.4f ccc=%.4f',r_Pearson,r_Spearman,c{1}.est)]};
+% nudgeX=range(x)/20;
+% nudgeY=range(y)/20;
+% 
+%     if r_Pearson > 0
+%         text(ah,(ah.XLim(1))+nudgeX,ah.YLim(2)-nudgeY/2,Str,'VerticalAlignment','Top','HorizontalAlignment', 'Left','FontSize',p.FontSize);
+%     else
+%         text(ah,(ah.XLim(2))-nudgeX,ah.YLim(2)-nudgeY/2,Str,'VerticalAlignment','Top','HorizontalAlignment', 'right','FontSize',p.FontSize);
+%     end
+
 
 if p.ColorBar
     hc = colorbar(ah);
@@ -217,6 +234,8 @@ addParameter(p,'PointsToExclude', [], @(x) isnumeric(x))
 addParameter(p,'PlotLine', false, @islogical);
 addParameter(p,'NudgePercent', 2, @(x) isnumeric(x) && isscalar(x) && x > 0);
 addParameter(p,'FontSize', 10, @(x) isnumeric(x) && isscalar(x) && x > 0);
+addParameter(p,'XGrid', 'On' );
+addParameter(p,'YGrid', 'On' );
 parse(p,varargin{:});
 p = p.Results;
 
