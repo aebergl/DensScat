@@ -145,7 +145,7 @@ if isgraphics(p.TargetAxes,'axes')
     fh = p.TargetAxes.Parent;
 else
     % Create figure handle
-    fh = figure('Name','Density Scatter Plot','Color','w','Tag','Density Scatter Plot','GraphicsSmoothing','off');
+    fh = figure('Name','Density Scatter Plot','Color','w','Tag','Density Scatter Plot');
     % Create figure handle
     ah = axes(fh,'NextPlot','add','tag','Scatter Plot','Box','on','FontSize',p.FontSize,'Linewidth',1);
     ah.XGrid=p.XGrid;
